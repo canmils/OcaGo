@@ -50,6 +50,14 @@ Controls support keyboard focus; the rules dialog supports Escape and focus trap
 
 The first visit includes a short welcome. Player cards show progress; starting tokens stay visible at Salida. New adventures ask for confirmation, and a victory panel offers replay.
 
+## Sound and accessible exploration
+
+Sound is off by default. Use **Sonido: no** to enable original synthesized garden cues; the choice is saved in this browser. Audio starts only after a user gesture. Muting and restarting stop active sounds. Device listening and subjective balance still need human evaluation.
+
+**Turnos** keeps the latest 12 outcomes from this session, so a human result remains available while bots play. This transcript resets with a new match or page load; the match itself still resumes from its saved state. Open **Explorar casillas** for large previous/next controls and a numbered square picker. The board has one keyboard tab stop: arrows follow the numbered route, Home/End jump to the ends, and Enter/Space explains the selected square. Bot turns wait while a dialog is open. Rest turns do not animate a dice roll.
+
+The expanded specialist team delivers [creative direction](docs/CREATIVE_DIRECTION.md), [production goals](docs/PRODUCTION.md), [technical art](docs/TECHNICAL_ART.md), [audio](docs/AUDIO.md), and an [actual usability walkthrough](docs/PLAYTEST.md). [Progression](docs/PROGRESSION.md) and [events](docs/LIVE_EVENTS.md) are future designs, not implemented features.
+
 ## Scope and continuation
 
 This is a complete local prototype, not a published service. Matches automatically save in this browser after every resolved turn; refreshing resumes the saved match, including computer turns and completed games. Storage failure or corrupt saves recover safely. Online play, long-term progression, sound controls, events, and cosmetic collection are future milestones. No Scopely assets, branding, or private implementation are used. See `AGENTS.md` for the durable autonomous brief and `docs/` for research, design, and handoff.

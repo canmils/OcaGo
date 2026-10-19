@@ -1,0 +1,48 @@
+/* Original garden material system. No network, canvas, animation loop or assets. */
+.garden-atmosphere {
+  box-shadow: inset 0 2px 3px #fff9, inset 0 -8px 18px #24523b28, 0 1px 0 #fff8;
+}
+.garden-atmosphere .cell {
+  background-image: linear-gradient(155deg, #fff7, transparent 55%, #3356360a);
+  border-top: 1px solid #fff9;
+}
+.garden-atmosphere .garden {
+  background: radial-gradient(ellipse at 50% 42%, #ffedb554, transparent 69%);
+}
+.garden-atmosphere .island-art {
+  filter: drop-shadow(0 5px 2px #28573e38);
+}
+.garden-atmosphere .traveler-trail {
+  box-shadow: inset 0 0 0 1px #e8af5eaa, 0 3px 0 #a7b88c;
+}
+.garden-atmosphere .traveler-focus {
+  box-shadow: inset 0 0 0 2px var(--traveler-color), 0 3px 0 #7e9870;
+}
+.garden-atmosphere .traveler-focus .number { color: #233e31; }
+.garden-atmosphere .traveler-focus .current-token {
+  outline-color: var(--traveler-color);
+  box-shadow: 0 0 0 4px #fff6, 0 3px 5px #193b3955;
+}
+.garden-arrival {
+  position: absolute;
+  inset: -3px;
+  border: 3px solid #efb64f;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  box-shadow: 0 0 10px #ffdc8280, inset 0 0 8px #fff8;
+}
+.garden-arrival--bridge { border-color: #3c988b; box-shadow: 0 0 10px #89d8ccaa; }
+.garden-arrival--rest { border-color: #8c7ab0; box-shadow: 0 0 10px #d4c4e8aa; }
+.garden-arrival--setback { border-color: #bf6a4b; box-shadow: 0 0 10px #eebd98aa; }
+.garden-arrival--finish { border-color: #fff1b5; box-shadow: 0 0 16px #ffd461; }
+@media (max-width: 700px) {
+  .garden-arrival { inset: -2px; border-width: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .garden-arrival { display: none; }
+  .garden-atmosphere .traveler-trail { box-shadow: 0 2px 0 #a7b88c; }
+}
+@media (forced-colors: active) {
+  .garden-atmosphere .traveler-focus { outline: 2px solid Highlight; outline-offset: -2px; }
+}

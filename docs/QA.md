@@ -18,7 +18,7 @@ Chromium through Playwright, HTTP development and production preview servers, on
 - Reload of a saved bot turn schedules automatic movement.
 - Restart while a move is in flight leaves all three players at zero and cancels stale work.
 - Human skipped-turn action; forced human and bot victory; terminal state survives reload; new match is playable.
-- A complete seeded match, from all players at zero to victory, finished in 24 simulated clock cycles. The human rolled through the visible button, and both bots ran automatically.
+- A complete seeded match, from all players at zero to victory, finished in 24 simulated clock cycles in the initial redesign and 15 cycles in the final specialist slice. Clock cycles measure harness batching, not gameplay turns. The human rolled through the visible button, and both bots ran automatically.
 - Persisted name containing `<em id="injected">X</em>` displays as text; no injected element exists after the frontend fix.
 - Zero JavaScript page errors in the clean integrated run. An earlier missing-export error occurred during concurrent hot reload; that transitional observation is excluded from the final pass.
 
@@ -40,6 +40,21 @@ PLAYWRIGHT_MODULE_PATH=/path/to/playwright CHROMIUM_PATH=/usr/bin/chromium node 
 
 The browser suite accepts `QA_URL` (default `http://localhost:5173`) and writes fresh screenshots to `docs/screenshots/`. It uses deterministic browser randomness for finish fixtures and the complete seeded match. Playwright is an optional QA prerequisite, not an application dependency.
 
-The final production-preview run used `QA_URL=http://localhost:4173` and passed the full suite, including its asserted layout measurements and 24-cycle seeded match, with zero page errors. Published screenshots were refreshed by that production run.
+The final production-preview run used `QA_URL=http://localhost:4173` and passed the full suite, including its asserted layout measurements and a complete seeded match, with zero page errors. Published screenshots were refreshed by that production run.
 
 Not established by these checks: public deployment, Safari/iOS behavior, screen-reader usability, contrast compliance, offline reload caching, or long-term retention/enjoyment. Reduced-motion gameplay was exercised. Separate 390×844 ordinary/reduced-motion checks observed one/zero active animations immediately after rolling, respectively; both restarted cleanly, remained at zero after 1.8 seconds, and emitted no page errors. These are behavior checks, not a claim of an exhaustive accessibility audit.
+
+
+## Final specialist slice validation
+
+Rebuilt with `npm run build -- --base=./` (production bundle `index-8cRhdXRL.js`) and reran the expanded suite against port 4173. All 16 engine/storage tests pass. The final production browser suite passes with zero page errors and fresh screenshots at all four widths.
+
+Additional assertions now cover:
+
+- Sound defaults off and creates no AudioContext. Explicit activation creates one context and persists the preference; reload preserves the opt-in without creating a context, and mute updates the button/state. A restored bot turn with saved sound opt-in also creates no AudioContext automatically. These are headless API behavior checks; audio timbre and perceived loudness were not listened to.
+- The board has exactly one cell in the tab order; ArrowRight, Home, and End move focus along the route. Enter/Space inspect tiles; previous/next and the numeric picker measure at least 44px high.
+- Bots remain still while the rules dialog is open and resume after dismissal.
+- A skipped human turn clears its skip counter without a dice animation or the distinctive roll-note frequencies. The two-note rest cue is allowed. The journal retains the skip message through subsequent bot turns; after a complete match its history is capped at 12 entries.
+- Separate real-time, ordinary-motion mobile check: a goose arrival displays the actual result while two animations remain active and the roll button is disabled. The message reads “Tú saca 1 y llega a la casilla 9. ¡De oca a oca y tiro porque me toca!” Restart remains stable afterward and there are no page errors.
+
+The final screenshots include sound/journal controls, original portraits, and the new board presentation. These checks do not establish that the journal survives a full page reload; its intended scope is the current session.

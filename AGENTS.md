@@ -15,6 +15,8 @@ Prioritize the playable core over speculative scope. Follow with locally persist
 ## Team and working agreements
 The active specialist team and file ownership are recorded in [docs/TEAM.md](docs/TEAM.md): UI/UX, art, animation, frontend, backend/data, QA, and coordinator. These roles supplement the initial research/design/development roles below. Read the current status before starting work to avoid repeating completed tasks.
 
+The expanded team adds creative direction, game design/production, technical art, sound, playtest/usability analysis, and progression/economy/live-event design. Coordinate against the current vertical-slice goals in docs/PRODUCTION.md. Preserve opt-in audio, cancellation-safe effects, accessible exploration and truthful evidence. Design documents for future systems do not establish those systems are built.
+
 - Research agent: analyze public evidence about La Oca and MONOPOLY GO! product systems; cite sources and separate observations, inferences, and recommendations. Do not invent research or claim access to internal systems.
 - Game design agent: define rules, first-session experience, presentation, acceptance criteria, and later progression. Own design documents, not implementation files.
 - Development agent: build the runnable prototype and meaningful tests. Own application source and tooling. Read research/design as they arrive; proceed with documented defaults when they are pending.

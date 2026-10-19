@@ -1,10 +1,10 @@
 # OcaGo delivery status
 
 ## Current milestone
-Specialist redesign of the playable local MVP is implemented and independently validated. Public hosting is not verified. This is a local browser game against bots, not online multiplayer or a finished commercial product.
+The specialist vertical slice extends the playable local MVP with original cast portraits, technical-art depth/arrival effects, opt-in sound, persistent turn feedback and accessible board exploration. Public hosting is not verified. This is a local browser game against bots, not online multiplayer or a finished commercial product.
 
 ## Team and visible evidence
-- [Specialist team and ownership](TEAM.md): UI/UX, art, animation, frontend, backend/data, QA, coordinator.
+- [Specialist team and ownership](TEAM.md): UI/UX, art, animation, frontend, backend/data, QA, creative director, game designer/producer, technical artist, sound designer, playtest analyst, progression/economy/live-events designer, coordinator.
 - [Mobile screenshot](screenshots/game-390.png), [small mobile](screenshots/game-320.png), [desktop](screenshots/game-1440.png).
 - [Independent QA report](QA.md) and repeatable browser suite at `scripts/qa-browser.cjs`.
 - [UX audit](UX.md), [art direction](ART.md), [motion](ANIMATION.md), [data architecture](BACKEND.md), [rules/design](DESIGN.md), [research limitations](RESEARCH.md).
@@ -12,7 +12,7 @@ Specialist redesign of the playable local MVP is implemented and independently v
 These are actual deliverables, not a live agent dashboard. Agents run within an active session; durable instructions and files allow later sessions to resume.
 
 ## Shipped implementation
-Spanish La Oca with one human and two bots, 63-square spiral, exact finish/reflection, single goose jump and extra roll, bridge, finite inn/well/prison penalties, maze and death. Original SVG garden and goose artwork, visible start tokens, route arrows, tile inspection, mobile action dock, progress cards, welcome/rules/restart/victory dialogs, cancellation-safe effects, reduced motion, and validated versioned local saves. No external runtime font dependency, account, payments, or server required.
+Spanish La Oca with one human and two bots, 63-square spiral, exact finish/reflection, single goose jump and extra roll, bridge, finite inn/well/prison penalties, maze and death. Original SVG garden and goose artwork, visible start tokens, route arrows, tile inspection, mobile action dock, progress cards, welcome/rules/restart/victory dialogs, cancellation-safe effects, reduced motion, and validated versioned local saves. No external runtime font dependency, account, payments, or server required. The expanded slice adds cohesive original Lola/Bruno portraits, garden depth/focus trails, distinct arrival effects, opt-in synthesized sound with safe mute/restart, a latest-12-turn transcript, a 44px square navigator, and roving board keyboard focus. Skipped turns no longer animate dice. Bots pause while dialogs are open. Audio requires a user gesture and does not initialize autonomously on restored bot turns.
 
 ## Verified in this environment
 - Fresh `npm ci --cache /tmp/ocago-npm-cache` succeeded using the lockfile.
@@ -22,16 +22,20 @@ Spanish La Oca with one human and two bots, 63-square spiral, exact finish/refle
 - Ordinary/reduced-motion cancellation checks passed. Production smoke found no broken images or HTTP errors.
 - QA found and frontend fixed persisted-name markup injection, undersized touch targets and mobile restart obstruction.
 
-See QA.md for limits: Safari/iOS, screen readers, comprehensive contrast compliance, public hosting and long-term enjoyment are not established by these checks.
+The expanded production-browser suite additionally verifies sound opt-in, stored preference/mute, no autonomous AudioContext on a restored bot turn, no dice motion/cue on rest, transcript retention, dialog-paused bots, and roving board navigation. See QA.md for exact results and limits: Safari/iOS, screen readers, comprehensive contrast compliance, public hosting and long-term enjoyment are not established by these checks.
 
 ## GitHub delivery and hosting
 Repository: https://github.com/canmils/OcaGo . Coordinator pushes integrated validated work to main under the user's explicit GitHub delivery instruction. GitHub Actions workflow tests/builds and deploys to Pages when configured. A push alone does not prove deployment.
 
 The environment returned proxy 403 for api.github.com and canmils.github.io, so deployment configuration/status and the public game cannot be verified here. Required domain additions were saved in the environment draft alongside tested install/start instructions. Saving the draft does not apply or publish it. Review/save changes in environment settings and publish the environment to activate them. If repository Pages is not configured, use Settings → Pages → GitHub Actions; the deployment job supplies the actual URL.
 
+## Specialist direction and honest quality bar
+
+CREATIVE_DIRECTION.md and PRODUCTION.md define the next quality gates. PLAYTEST.md records a real heuristic/browser walkthrough, not a study with human participants. The interface is an improved original prototype; it does not establish parity with a large mobile-game production. A real-human playtest and device listening pass remain important next steps.
+
 ## Next milestone
 1. Verify GitHub Actions deployment and a real public playable request once network/Pages access is available.
 2. Assess the actual playable experience and iterate on board legibility, motion and onboarding; do not call a first redesign commercial polish.
-3. Add long-term progression/cosmetics only after the match experience is accepted. Online play, events, sound and a server economy remain future work.
+3. Add long-term progression/cosmetics only after the match experience is accepted. Online play, events, music/voice work and a server economy remain future work. Cosmetic progression and event proposals are in PROGRESSION.md and LIVE_EVENTS.md; neither system is implemented. SOUND cues are implemented; subjective audible balance is untested.
 
 Read AGENTS.md before continuing. Use the existing isolated checkout; do not create a worktree unless requested. Make routine decisions autonomously, preserve user work, and record evidence rather than claiming unrun checks.
