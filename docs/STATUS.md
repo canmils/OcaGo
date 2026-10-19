@@ -1,28 +1,37 @@
-# OcaGo status and autonomous handoff
+# OcaGo delivery status
 
 ## Current milestone
-Build and validate the first playable local match described in [DESIGN.md](DESIGN.md). The user has supplied the product direction and authorized autonomous agent coordination; routine product and implementation choices do not need further prompting.
+Specialist redesign of the playable local MVP is implemented and independently validated. Public hosting is not verified. This is a local browser game against bots, not online multiplayer or a finished commercial product.
 
-## Durable team instructions
-Read [AGENTS.md](../AGENTS.md) before working. This repository is the durable handoff; live research, design, and development agents only run during an active session. Resume from recorded artifacts and actual validation results. Use this existing isolated checkout rather than creating a worktree unless requested.
+## Team and visible evidence
+- [Specialist team and ownership](TEAM.md): UI/UX, art, animation, frontend, backend/data, QA, coordinator.
+- [Mobile screenshot](screenshots/game-390.png), [small mobile](screenshots/game-320.png), [desktop](screenshots/game-1440.png).
+- [Independent QA report](QA.md) and repeatable browser suite at `scripts/qa-browser.cjs`.
+- [UX audit](UX.md), [art direction](ART.md), [motion](ANIMATION.md), [data architecture](BACKEND.md), [rules/design](DESIGN.md), [research limitations](RESEARCH.md).
 
-## Design decisions
-- Spanish-first mobile web prototype; one human and two local bots.
-- Single die, 63-square spiral, exact finish and reflected overshoot.
-- Finite well/prison penalties, no collision rules, no special first-roll exception.
-- Goose jumps stop after one forced move; square 59 jumps to finish.
-- No backend, account, monetization, or externally published deployment in the first milestone.
+These are actual deliverables, not a live agent dashboard. Agents run within an active session; durable instructions and files allow later sessions to resume.
 
-## Work recorded
-- Autonomous mission and team ownership are established in AGENTS.md.
-- DESIGN.md defines the rules contract, original art direction, first-session flow, acceptance criteria, and later milestones.
-- Development and research are concurrent tasks. Their final implementation and evidence must be checked before marking acceptance criteria passed.
+## Shipped implementation
+Spanish La Oca with one human and two bots, 63-square spiral, exact finish/reflection, single goose jump and extra roll, bridge, finite inn/well/prison penalties, maze and death. Original SVG garden and goose artwork, visible start tokens, route arrows, tile inspection, mobile action dock, progress cards, welcome/rules/restart/victory dialogs, cancellation-safe effects, reduced motion, and validated versioned local saves. No external runtime font dependency, account, payments, or server required.
 
-## Validation record
-MVP implemented. Eight engine tests and the production build passed. Chromium checks passed desktop/mobile layouts, rolling, automatic bots, help, restart, and a complete match through victory. GitHub Pages workflow added; deployment and public URL remain unverified because GitHub API access returns Forbidden in this environment.
+## Verified in this environment
+- Fresh `npm ci --cache /tmp/ocago-npm-cache` succeeded using the lockfile.
+- `npm test`: 16 passed, zero failed/skipped, including 378 position/die combinations and persistence recovery.
+- `npm run build -- --base=./`: TypeScript and production bundle passed.
+- Independent Chromium production-browser suite: 320/360/390px mobile and 1440px desktop; no overflow; mobile roll control at least 44px and visible; board above action dock; keyboard tile inspection/help; bots and resumed turns; skip; restart during movement; persisted human/bot victory; complete seeded match; zero JavaScript errors.
+- Ordinary/reduced-motion cancellation checks passed. Production smoke found no broken images or HTTP errors.
+- QA found and frontend fixed persisted-name markup injection, undersized touch targets and mobile restart obstruction.
 
-## Next actions
-1. Align the implemented engine and in-app rules with DESIGN.md; explicitly document any agreed deviation.
-2. Run deterministic engine tests and production build.
-3. Start the application and exercise a representative match, restart, keyboard controls, and narrow viewport using available browser tooling.
-4. Record commands, outcomes, limitations, and the next incomplete milestone here. Keep README setup instructions consistent with the actual project.
+See QA.md for limits: Safari/iOS, screen readers, comprehensive contrast compliance, public hosting and long-term enjoyment are not established by these checks.
+
+## GitHub delivery and hosting
+Repository: https://github.com/canmils/OcaGo . Coordinator pushes integrated validated work to main under the user's explicit GitHub delivery instruction. GitHub Actions workflow tests/builds and deploys to Pages when configured. A push alone does not prove deployment.
+
+The environment returned proxy 403 for api.github.com and canmils.github.io, so deployment configuration/status and the public game cannot be verified here. Required domain additions were saved in the environment draft alongside tested install/start instructions. Saving the draft does not apply or publish it. Review/save changes in environment settings and publish the environment to activate them. If repository Pages is not configured, use Settings → Pages → GitHub Actions; the deployment job supplies the actual URL.
+
+## Next milestone
+1. Verify GitHub Actions deployment and a real public playable request once network/Pages access is available.
+2. Assess the actual playable experience and iterate on board legibility, motion and onboarding; do not call a first redesign commercial polish.
+3. Add long-term progression/cosmetics only after the match experience is accepted. Online play, events, sound and a server economy remain future work.
+
+Read AGENTS.md before continuing. Use the existing isolated checkout; do not create a worktree unless requested. Make routine decisions autonomously, preserve user work, and record evidence rather than claiming unrun checks.

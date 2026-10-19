@@ -13,12 +13,16 @@ Make play legible, lively, and welcoming: a distinctive original goose identity,
 Prioritize the playable core over speculative scope. Follow with locally persisted progression and cosmetic rewards if the complete match is stable. Events, online multiplayer, accounts, server economy, and monetization are later milestones, not prerequisites. Avoid manipulative monetization and paid dependencies.
 
 ## Team and working agreements
+The active specialist team and file ownership are recorded in [docs/TEAM.md](docs/TEAM.md): UI/UX, art, animation, frontend, backend/data, QA, and coordinator. These roles supplement the initial research/design/development roles below. Read the current status before starting work to avoid repeating completed tasks.
+
 - Research agent: analyze public evidence about La Oca and MONOPOLY GO! product systems; cite sources and separate observations, inferences, and recommendations. Do not invent research or claim access to internal systems.
 - Game design agent: define rules, first-session experience, presentation, acceptance criteria, and later progression. Own design documents, not implementation files.
 - Development agent: build the runnable prototype and meaningful tests. Own application source and tooling. Read research/design as they arrive; proceed with documented defaults when they are pending.
 - Coordinator: maintain shared goals, integrate findings, resolve conflicts, validate the complete workflow, and report concrete outcomes and limitations.
 
 Each agent owns its assigned files and records decisions, evidence, results, and remaining work in repository documentation. Do not overwrite another agent's work. Coordinate interface changes explicitly. Do not commit or push unless requested.
+
+The user has now explicitly requested GitHub delivery to `canmils/OcaGo`. The coordinator may commit and push integrated, validated work to `main`; specialist agents leave committing and pushing to the coordinator. GitHub Pages is the requested playable delivery path. Do not describe an unverified deployment as live.
 
 ## Milestones and quality gate
 1. Research and concise product/rules specification.

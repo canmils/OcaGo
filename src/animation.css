@@ -1,0 +1,13 @@
+.motion-dice { will-change: transform; }
+.victory-petals { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 10; border-radius: inherit; }
+.victory-petals i { position: absolute; top: -12px; left: var(--petal-x); width: 8px; height: 13px; border-radius: 65% 20% 65% 20%; background: var(--petal-color); opacity: 0; animation: garden-petal 1900ms var(--petal-delay) ease-in forwards; }
+@keyframes garden-petal {
+  0% { opacity: 0; transform: translate(0, -12px) rotate(0); }
+  12% { opacity: 1; }
+  85% { opacity: .9; }
+  100% { opacity: 0; transform: translate(var(--petal-drift), 560px) rotate(340deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .victory-petals { display: none; }
+  .motion-dice { will-change: auto; }
+}
