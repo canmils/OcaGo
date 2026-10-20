@@ -1,41 +1,42 @@
-# OcaGo delivery status
+# OcaGo delivery status — 2026-10-20
 
-## Current milestone
-The specialist vertical slice extends the playable local MVP with original cast portraits, technical-art depth/arrival effects, opt-in sound, persistent turn feedback and accessible board exploration. Public hosting is not verified. This is a local browser game against bots, not online multiplayer or a finished commercial product.
+## Latest user direction
 
-## Team and visible evidence
-- [Specialist team and ownership](TEAM.md): UI/UX, art, animation, frontend, backend/data, QA, creative director, game designer/producer, technical artist, sound designer, playtest analyst, progression/economy/live-events designer, coordinator.
-- [Mobile screenshot](screenshots/game-390.png), [small mobile](screenshots/game-320.png), [desktop](screenshots/game-1440.png).
-- [Independent QA report](QA.md) and repeatable browser suite at `scripts/qa-browser.cjs`.
-- [UX audit](UX.md), [art direction](ART.md), [motion](ANIMATION.md), [data architecture](BACKEND.md), [rules/design](DESIGN.md), [research limitations](RESEARCH.md).
+English throughout. Follow the supplied illustrated board's composition: large bottom-left start, route moving right then around broad illustrated rings, central finish, drawing in every cell, visible players and restrained idle motion. This direction replaces the earlier Spanish/grid prototype.
 
-These are actual deliverables, not a live agent dashboard. Agents run within an active session; durable instructions and files allow later sessions to resume.
+## Implemented and independently verified
 
-## Shipped implementation
-Spanish La Oca with one human and two bots, 63-square spiral, exact finish/reflection, single goose jump and extra roll, bridge, finite inn/well/prison penalties, maze and death. Original SVG garden and goose artwork, visible start tokens, route arrows, tile inspection, mobile action dock, progress cards, welcome/rules/restart/victory dialogs, cancellation-safe effects, reduced motion, and validated versioned local saves. No external runtime font dependency, account, payments, or server required. The expanded slice adds cohesive original Lola/Bruno portraits, garden depth/focus trails, distinct arrival effects, opt-in synthesized sound with safe mute/restart, a latest-12-turn transcript, a 44px square navigator, and roving board keyboard focus. Skipped turns no longer animate dice. Bots pause while dialogs are open. Audio requires a user gesture and does not initialize autonomously on restored bot turns.
+- English interface, help, square explorer, accessibility labels, metadata, engine outcomes and saved-match migration. Version-1 Spanish saves preserve positions/penalties and migrate to English version 2.
+- 63 original illustrated, numbered, nonoverlapping cells; large bottom-left START vignette, clockwise outer/inner route and large central Goose Garden.
+- Aspect-aware art keeps complete characters/objects within narrow and wide panels. Every cell contains a drawing; scenery has no extra rule effect.
+- You, Lola and Bruno are visible above the board. All starting pawns are visible. Shared pawns adapt to cell shape instead of clipping each other; numbers remain readable.
+- Inline mobile turn controls no longer cover the roster. Desktop board fits normal-height windows; zoom and the larger square explorer provide detail.
+- Actual idle goose breathing/blinking, leaf flutter, water shimmer and token halo. Motion pauses hidden, stops for reduced motion, and does not override character placement.
+- Roll/bots, all special rules, exact finish/bounce, replay, cancellation, saved games, opt-in sound, turn history and keyboard exploration remain functional.
 
-## Verified in this environment
-- Fresh `npm ci --cache /tmp/ocago-npm-cache` succeeded using the lockfile.
-- `npm test`: 16 passed, zero failed/skipped, including 378 position/die combinations and persistence recovery.
-- `npm run build -- --base=./`: TypeScript and production bundle passed.
-- Independent Chromium production-browser suite: 320/360/390px mobile and 1440px desktop; no overflow; mobile roll control at least 44px and visible; board above action dock; keyboard tile inspection/help; bots and resumed turns; skip; restart during movement; persisted human/bot victory; complete seeded match; zero JavaScript errors.
-- Ordinary/reduced-motion cancellation checks passed. Production smoke found no broken images or HTTP errors.
-- QA found and frontend fixed persisted-name markup injection, undersized touch targets and mobile restart obstruction.
+## Validation evidence
 
-The expanded production-browser suite additionally verifies sound opt-in, stored preference/mute, no autonomous AudioContext on a restored bot turn, no dice motion/cue on rest, transcript retention, dialog-paused bots, and roving board navigation. See QA.md for exact results and limits: Safari/iOS, screen readers, comprehensive contrast compliance, public hosting and long-term enjoyment are not established by these checks.
+`npm test`: **19 passed**, zero failed/skipped, including board bounds/nonoverlap/start/finish and legacy-save migration. `npm run build -- --base=./`: TypeScript and production bundle pass.
 
-## GitHub delivery and hosting
-Repository: https://github.com/canmils/OcaGo . Coordinator pushes integrated validated work to main under the user's explicit GitHub delivery instruction. GitHub Actions workflow tests/builds and deploys to Pages when configured. A push alone does not prove deployment.
+Independent production-browser suite passed 320/360/390px mobile and 1440px desktop: English, all63 drawings, starting geometry, visible roster/start tokens, shared pawns on portrait/landscape squares, zoom/pan, sounds/persistence, complete match, win/replay, restart during movement, keyboard and dialogs. Ordinary motion showed five idle animations; reduced motion showed none; simulated hidden state paused them. Zero JavaScript page errors. See [QA.md](QA.md) for exact assertions and limitations.
 
-Verified 2026-10-20: GitHub API and the Pages hostname are now reachable. The public site returns HTTP 404; repository metadata confirms `has_pages: false`. GitHub Actions run 39293526486 passed dependency installation, tests and production build, then failed at `actions/configure-pages`; deployment was skipped. Attempting to enable Pages using the authenticated integration returned HTTP 403, `Resource not accessible by integration`. This is a GitHub integration permission blocker, not a game build failure. The repository owner must select Settings → Pages → GitHub Actions as the source, then rerun the deployment workflow. The expected project-site URL is https://canmils.github.io/OcaGo/ but it is not live as of this check. No agents are running in the background; specialist roles and handoffs are saved for active-session continuation.
+Actual captures: [mobile](screenshots/game-390.png), [small mobile](screenshots/game-320.png), [desktop](screenshots/game-1440.png), [shared pawns](screenshots/game-shared-390.png).
 
-## Specialist direction and honest quality bar
+## Team and autonomy
 
-CREATIVE_DIRECTION.md and PRODUCTION.md define the next quality gates. PLAYTEST.md records a real heuristic/browser walkthrough, not a study with human participants. The interface is an improved original prototype; it does not establish parity with a large mobile-game production. A real-human playtest and device listening pass remain important next steps.
+[Current brief](REFERENCE_SPRINT.md), [team](TEAM.md), [design](REFERENCE_DESIGN.md), [art](REFERENCE_ART.md), [UX](REFERENCE_UX.md), [motion](REFERENCE_MOTION.md). Specialists exchanged geometry, illustration and motion contracts; frontend integrated; QA independently found and retested desktop-start clipping, art cropping and shared-pawn clipping.
 
-## Next milestone
-1. Verify GitHub Actions deployment and a real public playable request once the repository owner enables Pages; API read access now works.
-2. Assess the actual playable experience and iterate on board legibility, motion and onboarding; do not call a first redesign commercial polish.
-3. Add long-term progression/cosmetics only after the match experience is accepted. Online play, events, music/voice work and a server economy remain future work. Cosmetic progression and event proposals are in PROGRESSION.md and LIVE_EVENTS.md; neither system is implemented. SOUND cues are implemented; subjective audible balance is untested.
+The agents operate autonomously within an active session. Their briefs persist; the processes do not run indefinitely after the session. [AUTONOMY.md](AUTONOMY.md) specifies a coordinated task loop and what a separately provisioned authenticated runner needs for unattended operation. No always-on runner is installed.
 
-Read AGENTS.md before continuing. Use the existing isolated checkout; do not create a worktree unless requested. Make routine decisions autonomously, preserve user work, and record evidence rather than claiming unrun checks.
+## GitHub and public delivery
+
+Repository: https://github.com/canmils/OcaGo . GitHub Pages is now enabled at https://canmils.github.io/OcaGo/ . The old deployment was reachable before this update; the coordinator must verify the new English build after pushing and deployment. A push or local test alone does not prove the public version.
+
+The install/start instructions were saved in the environment draft for reuse. Official Scopely/Monopoly GO research pages remain blocked by proxy policy. Required domains were saved while preserving existing allowlist entries; review/save changes in environment settings and publish to activate configuration. This saved draft is not an applied runtime change. No live Scopely gameplay audit is claimed; retrieved-source limits are explicit in REFERENCE_UX.md.
+
+## Remaining limitations and next queue
+
+- Real-user enjoyment studies, physical-device audio listening, Safari/iOS, screen-reader and exhaustive contrast audits are not established by Chromium checks.
+- Ring-transition cues and tiny board microdetail still benefit from zoom/explorer; further art refinement should follow real playtesting.
+- Local opponents only. Online multiplayer, accounts, persistent server progression and live events are not implemented; their earlier documents are proposals.
+- Continue from actual evidence and incomplete acceptance criteria, not a claim of parity with a major mobile-game production. Use the existing checkout, read AGENTS.md and do not create a worktree unless requested.

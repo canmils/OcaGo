@@ -7,7 +7,7 @@ export interface StorageLike {
   removeItem(key: string): void;
 }
 export const MATCH_STORAGE_KEY = 'ocago.match';
-const VERSION = 1;
+const VERSION = 2;
 const MAX_BYTES = 16_384;
 function browserStorage(): StorageLike | undefined {
   try { return globalThis.localStorage; } catch { return undefined; }
@@ -50,10 +50,19 @@ export function loadMatch(storage: StorageLike | undefined = browserStorage()): 
     if (raw === null) return null;
     if (raw.length > MAX_BYTES) { clearMatch(storage); return null; }
     const snapshot: unknown = JSON.parse(raw);
-    if (!record(snapshot) || snapshot.version !== VERSION || !isValidGame(snapshot.game)) {
+    if (!record(snapshot) || (snapshot.version !== VERSION && snapshot.version !== 1) || !isValidGame(snapshot.game)) {
       clearMatch(storage); return null;
     }
-    return cleanGame(snapshot.game);
+    const game = cleanGame(snapshot.game);
+    if (snapshot.version === 1) {
+      // Preserve the match while migrating the original Spanish presentation.
+      if (game.players[0].name === 'Tú') game.players[0].name = 'You';
+      game.message = game.winner !== null
+        ? `${game.players[game.winner].name === 'You' ? 'You win' : `${game.players[game.winner].name} wins`}! Welcome to the Goose Garden.`
+        : `Match resumed. ${game.players[game.turn].name === 'You' ? 'Your turn' : `${game.players[game.turn].name}'s turn`}.`;
+      saveMatch(game, storage);
+    }
+    return game;
   } catch { clearMatch(storage); return null; }
 }
 export function saveMatch(game: Game, storage: StorageLike | undefined = browserStorage()): boolean {

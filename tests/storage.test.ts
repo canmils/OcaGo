@@ -54,3 +54,18 @@ test('victory survives reload and invalid writes preserve the last valid match',
   assert.equal(saveMatch(invalid, storage), false);
   assert.deepEqual(loadMatch(storage), won);
 });
+
+test('legacy Spanish saves migrate to English without losing position, turn or penalties', () => {
+  const storage = memory(), game = newGame();
+  game.players[0].name = 'Tú'; game.players[0].position = 19; game.players[0].skip = 1;
+  game.players[1].position = 36; game.turn = 1; game.round = 4;
+  game.message = 'Tu aventura empieza aquí.';
+  storage.setItem(MATCH_STORAGE_KEY, JSON.stringify({ version: 1, game }));
+  const migrated = loadMatch(storage)!;
+  assert.equal(migrated.players[0].name, 'You');
+  assert.equal(migrated.players[0].position, 19); assert.equal(migrated.players[0].skip, 1);
+  assert.equal(migrated.turn, 1); assert.equal(migrated.round, 4);
+  assert.equal(migrated.message, "Match resumed. Lola's turn.");
+  assert.equal(JSON.parse(storage.getItem(MATCH_STORAGE_KEY)!).version, 2);
+  assert.deepEqual(loadMatch(storage), migrated);
+});

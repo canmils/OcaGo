@@ -17,7 +17,7 @@ async function motion(el: HTMLElement, frames: Keyframe[], duration: number, sig
 export async function animateDice(el: HTMLElement, die: number, signal?: AbortSignal): Promise<void> {
   if (signal?.aborted) return;
   el.classList.add('motion-dice');
-  el.setAttribute('aria-label', 'Lanzando el dado');
+  el.setAttribute('aria-label', 'Rolling the die');
   try {
     await motion(el, [
       {transform:'translateY(0) rotate(0) scale(1)'},
@@ -28,7 +28,7 @@ export async function animateDice(el: HTMLElement, die: number, signal?: AbortSi
     ], 440, signal);
     if (!signal?.aborted) {
       el.textContent = faces[die - 1] ?? '⚀';
-      el.setAttribute('aria-label', `Dado: ${die}`);
+      el.setAttribute('aria-label', `Die: ${die}`);
     }
   } finally { el.classList.remove('motion-dice'); }
 }

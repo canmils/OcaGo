@@ -1,5 +1,9 @@
 # Specialist delivery team
 
+## Current reference-based iteration
+
+The latest user correction takes priority: **English**, an illustrated board matching the supplied start/route/finish composition, every cell drawn, all players visible, and actual idle animation. See [REFERENCE_SPRINT.md](REFERENCE_SPRINT.md) for acceptance gates. Game design, art direction, UX research, animator, frontend and QA worked in parallel and shared concrete layout/module contracts. Root integrated English engine messages and migration of old saves. Relevant evidence: [design](REFERENCE_DESIGN.md), [art](REFERENCE_ART.md), [UX](REFERENCE_UX.md), [motion](REFERENCE_MOTION.md), and [QA](QA.md). [AUTONOMY.md](AUTONOMY.md) explains the active-session task loop and the additional runner needed for continuous unattended operation.
+
 The initial functional prototype is a baseline, not the final quality target. The user requested a specialist team to improve the actual game. All roles below are executing within this session; these instructions do not create an unattended background service.
 
 | Role | Concrete ownership | Required delivery |

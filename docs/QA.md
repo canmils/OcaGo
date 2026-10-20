@@ -1,60 +1,70 @@
 # Independent quality assurance
 
-QA owns this evidence, additional engine regressions, and browser checks. Product/design statements elsewhere are requirements, not evidence.
+## Current reference redesign — verified 2026-10-20
 
-## Engine and build
+The final browser run exercised the production preview on port 4173, bundle `index-BVNSs9bz.js`, using system Chromium and Playwright. This is evidence for the actual English illustrated-board implementation, not a pass based on design documents. The coordinator owns GitHub deployment/public-site verification separately.
 
-`npm test` passed 16 tests (the original eight, four persistence tests, and four independent QA regressions). `npm run build` passed TypeScript and the production Vite build.
+`npm test` passed 19 tests: engine rules, 378 position/die combinations, terminal/skip/collision cases, versioned saves and Spanish-save migration, and ordered/bounded/nonoverlapping board geometry. TypeScript and `npm run build -- --base=./` passed. The complete production-browser script exited successfully with zero JavaScript page errors.
 
-`tests/qa-rules.test.ts` exercises all 378 position/die combinations, including reflected landings and single-effect resolution. It also checks input preservation, unchanged opponents, both bot victory identities, terminal states, all-player skipped-turn cycles and round increments, and shared-square noncapture. This supplements, rather than duplicates, the original representative-rule tests.
+## Reference-specific acceptance
 
-## Redesigned browser evidence
+At 320×740, 360×800, 390×844, and 1440×1000:
 
-Chromium through Playwright, HTTP development and production preview servers, on 2026-10-19. Clean integrated runs passed:
+- All three player cards are visible simultaneously in the initial viewport. The roster is above the mobile board; it is not hidden under a fixed action dock.
+- All three starting tokens are visible inside the illustrated START apron at the bottom left. Numbered square 1 is a larger vignette: its area is at least 1.8 times ordinary square 2. The route begins to the right, and finish square 63 is centrally located.
+- Every numbered square 1–63 contains SVG illustration. Cell numbers, thematic special squares and original English scene labels remain available. The engine still starts players at position 0; the first roll moves onto numbered cells.
+- No horizontal document overflow. The primary roll control is visible and measures 45px high on phones, 51px on desktop.
+- Zoom enlarges artwork by more than 1.5× and provides internal panning without horizontal page overflow. Returning to overview restores the normal layout.
 
-- 320×740, 360×800, 390×844, and 1440×1000: no horizontal overflow. Mobile board remains above the fixed action dock, with the roll action visible without scrolling. Final measured mobile roll height: 44px; cell numbers: 10px.
-- Keyboard opening of rules with Enter, Escape dismissal, and return of focus to the help button.
-- Tile inspection with Enter and Space, readable bridge destination, Escape dismissal, and keyboard focus restored to the selected tile. These checks also passed against the production preview on port 4173.
-- Reload of a saved bot turn schedules automatic movement.
-- Restart while a move is in flight leaves all three players at zero and cancels stale work.
-- Human skipped-turn action; forced human and bot victory; terminal state survives reload; new match is playable.
-- A complete seeded match, from all players at zero to victory, finished in 24 simulated clock cycles in the initial redesign and 15 cycles in the final specialist slice. Clock cycles measure harness batching, not gameplay turns. The human rolled through the visible button, and both bots ran automatically.
-- Persisted name containing `<em id="injected">X</em>` displays as text; no injected element exists after the frontend fix.
-- Zero JavaScript page errors in the clean integrated run. An earlier missing-export error occurred during concurrent hot reload; that transitional observation is excluded from the final pass.
+At both 320px and 390px, fixtures placed all three players together on portrait square 3 and landscape square 10. Assertions verified three distinct initials, nonzero footprint, each token completely inside its cell, no pairwise overlap, and no token concealing the number-badge center. [Shared-square screenshot](screenshots/game-shared-390.png).
 
-Screenshots: [390px mobile](screenshots/game-390.png), [320px mobile](screenshots/game-320.png), [360px mobile](screenshots/game-360.png), [desktop](screenshots/game-1440.png). These show the redesigned application, not the previous baseline. Desktop uses vertical page scroll for the complete board.
+## English and gameplay
 
-## Bugs found and follow-up
+- The HTML language is `en`. The welcome, normal screen, help/rules, square explorer, victory and live outcomes pass an explicit check against the former Spanish vocabulary.
+- A real version-1 save with `Tú` and a Spanish bridge result migrates to version 2, English `You` and English resume status, preserving the player's position. Custom names are still safely rendered as text; an injected markup fixture creates no element.
+- Keyboard navigation has one board tab stop; arrows follow the route, Home/End jump to its ends, and Enter opens the correct square detail. Escape restores focus. Square navigator controls and numeric picker are at least 44px high.
+- Saved bot turns resume automatically. Bots remain paused while a rules dialog is open and continue after it closes.
+- Restart during movement cancels stale work and leaves all three players at START. A separate normal-motion check verified a real dice animation followed by cancellation and a stable reset after 1.6 seconds.
+- Rest turns decrement the skip counter without a dice animation or roll-note frequencies. The turn transcript retains the human result while both bots play and is capped at 12 entries.
+- Forced exact human and bot victories display the result, disable rolling, persist across reload, and permit replay. A complete seeded match from START to victory completed in 15 virtual-clock batches; the human used the visible roll button and bots ran automatically.
 
-- Fixed: persisted player names were interpolated as HTML. Regression browser case verifies literal rendering.
-- Fixed: mobile primary action measured 41px and narrow labels measured 9px. Final measurements are 44px and 10px.
-- Fixed: mobile restart scrolled beneath the fixed action dock and could not receive pointer input at 390×844. Increased bottom spacing and scroll margins restore access. The final suite performs gameplay interactions at mobile size, and a separate ordinary-motion browser run confirms stable restart after cancellation.
+## Actual animation and audio behavior
+
+A separate normal-motion Chromium page observed **five running idle animations** in the integrated board. The same page was given a simulated `document.hidden` state plus a `visibilitychange` event: the idle root became paused and its CSS animations were paused. Switching to reduced motion removed all idle animations. This tests the implementation's visibility handler; it is not a claim of exhaustive real-device background lifecycle coverage.
+
+Sound starts off. User opt-in creates an AudioContext; preference persists across reload, and mute updates correctly. A saved sound opt-in plus restored bot turn creates **zero AudioContexts without a new user gesture**. Cues are synthesized locally; these checks instrument context and oscillator behavior, not subjective listening quality or physical speakers.
+
+## Defects found and corrected
+
+1. Desktop board initially extended below a 1000px viewport, hiding START tokens. The desktop fit was corrected; the strict initial-visibility assertions now pass.
+2. Portrait/landscape art cropped heads and objects under cover scaling. Art direction introduced aspect-aware subjects with full-bleed backgrounds before the final captures.
+3. Shared pawns could clip in narrow cells. Frontend added compact, orientation-aware occupancy layouts, and QA now checks real token rectangles rather than only counting DOM elements.
+
+One early paused-bot virtual-clock check failed transiently during concurrent rebuilds. An isolated reproduction and subsequent complete unchanged runs passed. The final assertions remain strict; none were disabled to obtain the result.
+
+## Screenshots
+
+- [320px mobile](screenshots/game-320.png)
+- [360px mobile](screenshots/game-360.png)
+- [390px mobile](screenshots/game-390.png)
+- [1440px desktop](screenshots/game-1440.png)
+- [Shared-square example](screenshots/game-shared-390.png)
+
+These are captures of the final reference redesign, not the earlier grid prototype.
 
 ## Reproduce
 
-Start `npm run dev -- --port 5173`, then run from the repository root:
+Start the production preview after building, then run from the repository root:
 
 ```sh
-PLAYWRIGHT_MODULE_PATH=/path/to/playwright CHROMIUM_PATH=/usr/bin/chromium node scripts/qa-browser.cjs
+npm run build -- --base=./
+npm run preview -- --port 4173
+# In a second terminal, with Playwright available:
+PLAYWRIGHT_MODULE_PATH=/path/to/playwright CHROMIUM_PATH=/usr/bin/chromium QA_URL=http://localhost:4173 node scripts/qa-browser.cjs
 ```
 
-The browser suite accepts `QA_URL` (default `http://localhost:5173`) and writes fresh screenshots to `docs/screenshots/`. It uses deterministic browser randomness for finish fixtures and the complete seeded match. Playwright is an optional QA prerequisite, not an application dependency.
+The script writes fresh screenshots to `docs/screenshots/` and emits measured acceptance results. `PLAYWRIGHT_MODULE_PATH` can be omitted when Playwright is installed normally. It is an optional QA tool, not a production runtime dependency. Browser timing is virtualized for deterministic complete-match fixtures; normal-motion cancellation/idle checks use a separate page with real time.
 
-The final production-preview run used `QA_URL=http://localhost:4173` and passed the full suite, including its asserted layout measurements and a complete seeded match, with zero page errors. Published screenshots were refreshed by that production run.
+## Limits
 
-Not established by these checks: public deployment, Safari/iOS behavior, screen-reader usability, contrast compliance, offline reload caching, or long-term retention/enjoyment. Reduced-motion gameplay was exercised. Separate 390×844 ordinary/reduced-motion checks observed one/zero active animations immediately after rolling, respectively; both restarted cleanly, remained at zero after 1.8 seconds, and emitted no page errors. These are behavior checks, not a claim of an exhaustive accessibility audit.
-
-
-## Final specialist slice validation
-
-Rebuilt with `npm run build -- --base=./` (production bundle `index-8cRhdXRL.js`) and reran the expanded suite against port 4173. All 16 engine/storage tests pass. The final production browser suite passes with zero page errors and fresh screenshots at all four widths.
-
-Additional assertions now cover:
-
-- Sound defaults off and creates no AudioContext. Explicit activation creates one context and persists the preference; reload preserves the opt-in without creating a context, and mute updates the button/state. A restored bot turn with saved sound opt-in also creates no AudioContext automatically. These are headless API behavior checks; audio timbre and perceived loudness were not listened to.
-- The board has exactly one cell in the tab order; ArrowRight, Home, and End move focus along the route. Enter/Space inspect tiles; previous/next and the numeric picker measure at least 44px high.
-- Bots remain still while the rules dialog is open and resume after dismissal.
-- A skipped human turn clears its skip counter without a dice animation or the distinctive roll-note frequencies. The two-note rest cue is allowed. The journal retains the skip message through subsequent bot turns; after a complete match its history is capped at 12 entries.
-- Separate real-time, ordinary-motion mobile check: a goose arrival displays the actual result while two animations remain active and the roll button is disabled. The message reads “Tú saca 1 y llega a la casilla 9. ¡De oca a oca y tiro porque me toca!” Restart remains stable afterward and there are no page errors.
-
-The final screenshots include sound/journal controls, original portraits, and the new board presentation. These checks do not establish that the journal survives a full page reload; its intended scope is the current session.
+No real participant playtest, iOS/Safari run, screen-reader audit, exhaustive contrast audit, physical-device listening, server multiplayer, or long-term fun/retention outcome is established. At phone overview scale, some individual art and numbers are small; zoom and the large square explorer are provided as alternatives. This is an improved original playable prototype, not evidence of Scopely production parity. Public deployment must be checked independently after GitHub Actions finishes.

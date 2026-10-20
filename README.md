@@ -1,6 +1,8 @@
 # OcaGo
 
-An original, Spanish, mobile-first La Oca browser game. Play a complete local match against Lola and Bruno: 63-square spiral, animated movement, one six-sided die, special squares, automatic opponents, exact finish, victory, rules dialog, and restart. No account, payment, backend, or credentials required.
+An original, English, mobile-first Game of the Goose (La Oca). Play a complete local match against Lola and Bruno: 63-square spiral, animated movement, one six-sided die, special squares, automatic opponents, exact finish, victory, rules dialog, and restart. No account, payment, backend, or credentials required.
+
+**Play:** https://canmils.github.io/OcaGo/ — deployed versions are tracked in GitHub Actions.
 
 ## Progress and screenshots
 
@@ -40,24 +42,32 @@ One human and two automatic players start at 0. Each turn rolls one d6. The firs
 - Maze: 42 → 30.
 - Death: 58 → 0.
 
-This documented OcaGo variant has no collision effects or first-roll exception. Bots use the same rules and fair randomness as the human. Skipped turns require no die roll. During a human skipped turn, select “Descansar este turno.”
+This documented OcaGo variant has no collision effects or first-roll exception. Bots use the same rules and fair randomness as the human. Skipped turns require no die roll. During a human skipped turn, select “Rest this turn.”
 
 ## Structure and accessibility
 
-`src/game.ts` is a pure, immutable transition engine. `src/main.ts` renders the board, controls turns and cancels stale animation work on restart. `src/style.css` provides responsive layouts and a mobile action dock. `src/animation.ts` provides abortable dice, tile and victory motion with reduced-motion support. `src/storage.ts` validates and persists versioned local matches. Original SVG illustrations are in `public/art/`. `tests/game.test.ts` verifies every special square, bounce, win, skip, immutability, and complete seeded simulation.
+`src/game.ts` is a pure, immutable transition engine. `src/main.ts` renders the board, controls turns and cancels stale animation work on restart. `src/style.css` keeps the complete three-player roster above the board and places controls in normal flow, without an overlapping mobile dock. `src/board-layout.ts` defines the reference-inspired 63-cell inward route and `tests/board-layout.test.ts` verifies the geometry. `src/animation.ts` provides abortable dice, tile and victory motion with reduced-motion support. `src/storage.ts` validates and persists versioned local matches. Original character portraits are in `public/art/`; `src/tile-art.ts` provides 63 distinct illustrated square scenes plus large start/finish vignettes. `src/idle.ts` adds restrained, visibility-aware idle character/environment motion. `tests/game.test.ts` verifies every special square, bounce, win, skip, immutability, and complete seeded simulation.
 
 Controls support keyboard focus; the rules dialog supports Escape and focus trapping through the native dialog element. Status changes use a polite live region, tokens have player initials as well as colors, and reduced-motion preference suppresses animation. Dice use browser cryptographic randomness without modulo bias.
 
-The first visit includes a short welcome. Player cards show progress; starting tokens stay visible at Salida. New adventures ask for confirmation, and a victory panel offers replay.
+The first visit includes a short welcome. Player cards show progress; starting tokens stay visible in the bottom-left START meadow. New adventures ask for confirmation, and a victory panel offers replay.
+
+## Reference-inspired board
+
+The large illustrated START vignette is at the bottom left. The route runs right across the bottom, up the right edge, left across the top, down the left and inward to a large central square 63. Every numbered square contains original scene, character or object art. Players waiting at position 0 share the START meadow beside the first numbered square; entering square 1 still counts as one step. The art on ordinary squares adds no rule effect.
+
+All three players remain visible above the board on normal mobile play. On desktop, the default board fits common viewport heights and the roster remains sticky while scrolling. **Zoom in** enlarges the board inside a pannable viewport; **Explore squares** opens a larger picture and rule explanation with 44px previous/next controls. Tiny illustrated board cells are not claimed as 44px touch targets.
+
+See [reference layout](docs/REFERENCE_DESIGN.md), [reference art](docs/REFERENCE_ART.md), [idle motion](docs/REFERENCE_MOTION.md), and [UX evidence and limits](docs/REFERENCE_UX.md).
 
 ## Sound and accessible exploration
 
-Sound is off by default. Use **Sonido: no** to enable original synthesized garden cues; the choice is saved in this browser. Audio starts only after a user gesture. Muting and restarting stop active sounds. Device listening and subjective balance still need human evaluation.
+Sound is off by default. Use **Sound off** to enable original synthesized garden cues; the choice is saved in this browser. Audio starts only after a user gesture. Muting and restarting stop active sounds. Device listening and subjective balance still need human evaluation.
 
-**Turnos** keeps the latest 12 outcomes from this session, so a human result remains available while bots play. This transcript resets with a new match or page load; the match itself still resumes from its saved state. Open **Explorar casillas** for large previous/next controls and a numbered square picker. The board has one keyboard tab stop: arrows follow the numbered route, Home/End jump to the ends, and Enter/Space explains the selected square. Bot turns wait while a dialog is open. Rest turns do not animate a dice roll.
+**Turns** keeps the latest 12 outcomes from this session, so a human result remains available while bots play. This transcript resets with a new match or page load; the match itself still resumes from its saved state. Open **Explore squares** for large previous/next controls and a numbered square picker. The board has one keyboard tab stop: arrows follow the numbered route, Home/End jump to the ends, and Enter/Space explains the selected square. Bot turns wait while a dialog is open. Rest turns do not animate a dice roll.
 
 The expanded specialist team delivers [creative direction](docs/CREATIVE_DIRECTION.md), [production goals](docs/PRODUCTION.md), [technical art](docs/TECHNICAL_ART.md), [audio](docs/AUDIO.md), and an [actual usability walkthrough](docs/PLAYTEST.md). [Progression](docs/PROGRESSION.md) and [events](docs/LIVE_EVENTS.md) are future designs, not implemented features.
 
 ## Scope and continuation
 
-This is a complete local prototype, not a published service. Matches automatically save in this browser after every resolved turn; refreshing resumes the saved match, including computer turns and completed games. Storage failure or corrupt saves recover safely. Online play, long-term progression, sound controls, events, and cosmetic collection are future milestones. No Scopely assets, branding, or private implementation are used. See `AGENTS.md` for the durable autonomous brief and `docs/` for research, design, and handoff.
+This is a static browser MVP hosted through GitHub Pages, with local computer opponents and no online multiplayer server. Matches automatically save in this browser after every resolved turn; refreshing resumes the saved match, including computer turns and completed games. Storage failure or corrupt saves recover safely. Online play, long-term progression, events, music/voice work, and cosmetic collection are future milestones; opt-in sound controls are implemented. No Scopely assets, branding, or private implementation are used. See `AGENTS.md` for the durable autonomous brief and `docs/` for research, design, and handoff.
