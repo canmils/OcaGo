@@ -34,3 +34,7 @@ The agents operate independently within assigned ownership and exchange interfac
 The existing Spanish version was reachable at https://canmils.github.io/OcaGo/ before this redesign. GitHub Pages is now enabled. Earlier deployment-blocker notes are historical.
 
 Official Scopely/Monopoly GO research destinations are currently denied by the environment proxy. Required domains were added to the editable environment draft while preserving existing network rules. This save does not apply or publish configuration; research remains explicitly unverified until access is enabled. It does not block original reference-based implementation.
+
+## Completed delivery
+
+The reference redesign passed all19 unit tests and the strict production-browser suite; see QA.md. GitHub Actions [run39388226511](https://github.com/canmils/OcaGo/actions/runs/39388226511) successfully deployed source commit d88bded. The English game is live at https://canmils.github.io/OcaGo/ . All16 deployed HTML/JS/CSS/art files were fetched with HTTPS certificate validation enabled and matched the tested build byte-for-byte. Current screenshots show the actual integrated board, not a design mockup.

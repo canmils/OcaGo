@@ -68,3 +68,7 @@ The script writes fresh screenshots to `docs/screenshots/` and emits measured ac
 ## Limits
 
 No real participant playtest, iOS/Safari run, screen-reader audit, exhaustive contrast audit, physical-device listening, server multiplayer, or long-term fun/retention outcome is established. At phone overview scale, some individual art and numbers are small; zoom and the large square explorer are provided as alternatives. This is an improved original playable prototype, not evidence of Scopely production parity. Public deployment must be checked independently after GitHub Actions finishes.
+
+## Public deployment verification — 2026-10-20
+
+Coordinator verified GitHub Actions run39388226511 completed build and Pages deployment successfully for source commit d88bded. The site https://canmils.github.io/OcaGo/ serves the English HTML and all16 deployed HTML/JS/CSS/art files match the independently browser-tested production build byte-for-byte, downloaded with TLS certificate verification enabled. Direct public Chromium navigation failed with ERR_CERT_AUTHORITY_INVALID in the environment proxy; validation was not bypassed. Functional browser evidence above is from the identical local production build, while HTTPS verification establishes the published artifact identity. This distinction does not claim an end-to-end browser run against the public hostname.

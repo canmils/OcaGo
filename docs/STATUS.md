@@ -30,7 +30,7 @@ The agents operate autonomously within an active session. Their briefs persist; 
 
 ## GitHub and public delivery
 
-Repository: https://github.com/canmils/OcaGo . GitHub Pages is now enabled at https://canmils.github.io/OcaGo/ . The old deployment was reachable before this update; the coordinator must verify the new English build after pushing and deployment. A push or local test alone does not prove the public version.
+Repository: https://github.com/canmils/OcaGo . GitHub Pages is now enabled at https://canmils.github.io/OcaGo/ . The English redesign is publicly deployed and verified. GitHub Actions run 39388226511 built and deployed commit d88bded8ca520a99d0ea78c8af0a62eb28653ab6 successfully. HTTPS requests with certificate verification enabled fetched all16 published HTML/JS/CSS/art files; each matches the locally browser-tested production output byte-for-byte. The public HTML declares lang=en. Direct public-site Chromium navigation encountered this environment’s proxy-certificate trust error; verification used TLS-verified downloads plus the independent local production-browser suite, without disabling certificate validation.
 
 The install/start instructions were saved in the environment draft for reuse. Official Scopely/Monopoly GO research pages remain blocked by proxy policy. Required domains were saved while preserving existing allowlist entries; review/save changes in environment settings and publish to activate configuration. This saved draft is not an applied runtime change. No live Scopely gameplay audit is claimed; retrieved-source limits are explicit in REFERENCE_UX.md.
 
