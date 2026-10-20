@@ -27,14 +27,14 @@ The expanded production-browser suite additionally verifies sound opt-in, stored
 ## GitHub delivery and hosting
 Repository: https://github.com/canmils/OcaGo . Coordinator pushes integrated validated work to main under the user's explicit GitHub delivery instruction. GitHub Actions workflow tests/builds and deploys to Pages when configured. A push alone does not prove deployment.
 
-The environment returned proxy 403 for api.github.com and canmils.github.io, so deployment configuration/status and the public game cannot be verified here. Required domain additions were saved in the environment draft alongside tested install/start instructions. Saving the draft does not apply or publish it. Review/save changes in environment settings and publish the environment to activate them. If repository Pages is not configured, use Settings → Pages → GitHub Actions; the deployment job supplies the actual URL.
+Verified 2026-10-20: GitHub API and the Pages hostname are now reachable. The public site returns HTTP 404; repository metadata confirms `has_pages: false`. GitHub Actions run 39293526486 passed dependency installation, tests and production build, then failed at `actions/configure-pages`; deployment was skipped. Attempting to enable Pages using the authenticated integration returned HTTP 403, `Resource not accessible by integration`. This is a GitHub integration permission blocker, not a game build failure. The repository owner must select Settings → Pages → GitHub Actions as the source, then rerun the deployment workflow. The expected project-site URL is https://canmils.github.io/OcaGo/ but it is not live as of this check. No agents are running in the background; specialist roles and handoffs are saved for active-session continuation.
 
 ## Specialist direction and honest quality bar
 
 CREATIVE_DIRECTION.md and PRODUCTION.md define the next quality gates. PLAYTEST.md records a real heuristic/browser walkthrough, not a study with human participants. The interface is an improved original prototype; it does not establish parity with a large mobile-game production. A real-human playtest and device listening pass remain important next steps.
 
 ## Next milestone
-1. Verify GitHub Actions deployment and a real public playable request once network/Pages access is available.
+1. Verify GitHub Actions deployment and a real public playable request once the repository owner enables Pages; API read access now works.
 2. Assess the actual playable experience and iterate on board legibility, motion and onboarding; do not call a first redesign commercial polish.
 3. Add long-term progression/cosmetics only after the match experience is accepted. Online play, events, music/voice work and a server economy remain future work. Cosmetic progression and event proposals are in PROGRESSION.md and LIVE_EVENTS.md; neither system is implemented. SOUND cues are implemented; subjective audible balance is untested.
 
