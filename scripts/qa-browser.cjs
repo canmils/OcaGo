@@ -64,7 +64,7 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
     assert.equal(layout.startTokens.length,3);
     for (const token of layout.startTokens) assert(token.top>=0 && token.bottom<=height,'Starting tokens must be visible');
     assert(layout.roll.height>=44 && layout.roll.top>=0 && layout.roll.bottom<=height,`Visible 44px roll control at ${width}px`);
-    if(width===320||width===360) for(const [selector,target] of Object.entries(layout.targets)) {
+    for(const [selector,target] of Object.entries(layout.targets)) {
       assert(target.width>=44&&target.height>=44,`${selector} must be at least 44x44 at ${width}px (measured ${target.width}x${target.height})`);
       assert(layout.roll.width>target.width&&layout.roll.height>=target.height,`${selector} must stay smaller than the roll primary at ${width}px`);
     }
