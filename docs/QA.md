@@ -72,3 +72,36 @@ No real participant playtest, iOS/Safari run, screen-reader audit, exhaustive co
 ## Public deployment verification — 2026-10-20
 
 Coordinator verified GitHub Actions run39388226511 completed build and Pages deployment successfully for source commit d88bded. The site https://canmils.github.io/OcaGo/ serves the English HTML and all16 deployed HTML/JS/CSS/art files match the independently browser-tested production build byte-for-byte, downloaded with TLS certificate verification enabled. Direct public Chromium navigation failed with ERR_CERT_AUTHORITY_INVALID in the environment proxy; validation was not bypassed. Functional browser evidence above is from the identical local production build, while HTTPS verification establishes the published artifact identity. This distinction does not claim an end-to-end browser run against the public hostname.
+
+## UX-004 status font size — verified 2026-10-22 (PR #12, branch `fix/status-font-size` @ c5b95fc)
+
+Independent verification of finding UX-004 / issue #6 against PR #12. The PR changes only `src/style.css` (`.status` font-size 12px→13px base, 11px→13px in the ≤650px block, 10px→13px in the ≤360px block), adds a `statusFont` assertion to `scripts/qa-browser.cjs`, and refreshes screenshots. No engine, `main.ts` or `index.html` changes.
+
+Gates on the PR branch, after `npm ci`:
+
+- `npm test` — 22/22 pass (19 pre-existing + 3 new), exit 0.
+- `npm run build -- --base=./` — clean TypeScript + Vite build, exit 0.
+- `source scripts/browser-env.sh && QA_URL=http://localhost:5173 node scripts/qa-browser.cjs` against `npm run dev -- --port 5173` — exit 0, **0 page errors**, result object printed (complete seeded match, reduced motion, idle, zoom, shared tokens).
+
+Independent measurements (throwaway Playwright script, real Chromium, default state after dismissing welcome):
+
+| Viewport | `.status` font | Roll on screen | Horizontal overflow | Status overlaps die/roll/controls | Roster visible |
+| --- | --- | --- | --- | --- | --- |
+| 320×740 | **13px** ✓ | 45px, fully on screen ✓ | none (scrollW 320) ✓ | none ✓ | 3/3 ✓ |
+| 360×800 | **13px** ✓ | 45px, fully on screen ✓ | none (scrollW 360) ✓ | none ✓ | 3/3 ✓ |
+| 390×844 | **13px** ✓ | 45px, fully on screen ✓ | none (scrollW 390) ✓ | none ✓ | 3/3 ✓ |
+| 768×1024 | **13px** ✓ | 51px, fully on screen ✓ | none (scrollW 768) ✓ | none ✓ | 3/3 ✓ |
+| 1440×1000 | **13px** ✓ | 51px, fully on screen ✓ | none (scrollW 1440) ✓ | none ✓ | 3/3 ✓ |
+
+The browser suite itself does not cover 768×1024; that viewport was measured in the independent run above. Mid-game status messages after real rolls (e.g. "You roll 3 and reach square 32. Goose to goose! …") were also measured at 320/390/768/1440: 13px, no overlap, no overflow, roster visible, 0 page errors.
+
+Regression checks:
+
+- **54px min-height reserve**: base `.status` still declares `min-height:54px` and measures exactly 54px at 768×1024 and 1440×1000 in the default state. Mobile keeps its 16px minimum.
+- **Desktop aside/board fit**: at 1440×1000 the board bottom is 933px and the aside bottom 819.75px, both within the 1000px viewport; the layout bottom is 989px. The `@media(min-width:651px)` fit rule is unaffected.
+- **Long status wrapping**: a forced 260-character status string wraps to 5/4/7/5 lines at 320/390/768/1440 respectively, stays inside the turn-card box, has no horizontal text overflow, and covers no button, input, link, the die or the roll control at any of those viewports.
+- **Contrast unchanged**: computed `.status` color `rgb(230,236,210)` on turn-card `rgb(37,91,80)` = **6.43:1**, matching the audited value and passing WCAG AA.
+
+Acceptance criteria (issue #6 / UX-004): both criteria pass — ≥13px at all five viewports, and the text stays on one line or wraps gracefully without covering the die or roll button. Verdict: **PASS**.
+
+Regression test added: `tests/qa-visual.test.ts` pins the CSS contract in `npm test` — `.status` font-size ≥13px in the base rule and in the ≤650px and ≤360px media blocks, the 54px desktop reserve, and the 6.43:1 contrast floor. Proven to fail on `main`'s `style.css` (restored in place: `AssertionError: base .status font-size 12px < 13px`, 21/22) and to pass on the PR branch (22/22).
