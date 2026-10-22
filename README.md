@@ -4,6 +4,16 @@ An original, English, mobile-first Game of the Goose (La Oca). Play a complete l
 
 **Play:** https://canmils.github.io/OcaGo/ — deployed versions are tracked in GitHub Actions.
 
+[![OcaGo recorded desktop browser capture: illustrated board and player roster](docs/screenshots/game-1440.png)](https://canmils.github.io/OcaGo/)
+
+*Recorded browser capture from the repository; see the current game through the Play link.*
+
+## Help improve the first match
+
+[Share playtest feedback](https://github.com/canmils/OcaGo/issues/new): include your device/browser, whether you finished or replayed, the first rule or control that confused you, and one change you would make. For a bug, add the steps and expected versus actual result. GitHub feedback requires an account; playing does not.
+
+Interested in contributing? Small improvements to rule explanations, keyboard usability and mobile layout are welcome. Explain the player problem, keep the change focused, and run the existing tests/build for code changes. See [current priorities](docs/STATUS.md).
+
 ## Progress and screenshots
 
 See [current delivery status](docs/STATUS.md), [specialist team](docs/TEAM.md), and [independent QA evidence](docs/QA.md). Actual browser captures: [mobile](docs/screenshots/game-390.png) · [small mobile](docs/screenshots/game-320.png) · [desktop](docs/screenshots/game-1440.png). GitHub Actions shows build/deployment runs; screenshots are evidence of the local build, not a public game link.
