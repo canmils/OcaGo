@@ -52,6 +52,7 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
       return {
         width:innerWidth,height:innerHeight,overflow:document.documentElement.scrollWidth > innerWidth,
         roll:rect('#roll'),board:rect('#board'),start:rect('#cell-1'),second:rect('#cell-2'),finish:rect('#cell-63'),
+        targets:Object.fromEntries(['#help','#zoom','#legend','#restart'].map(selector=>[selector,rect(selector)])),
         players:[...document.querySelectorAll('#players .player')].map(el => el.getBoundingClientRect().toJSON()),
         startTokens:[...document.querySelectorAll('#start-tokens .token')].map(el => el.getBoundingClientRect().toJSON()),
         illustrated:[...document.querySelectorAll('.cell')].map(el => ({n:el.id,hasArt:!!el.querySelector('.tile-illustration svg,.tile-illustration img')})),
@@ -63,6 +64,10 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
     assert.equal(layout.startTokens.length,3);
     for (const token of layout.startTokens) assert(token.top>=0 && token.bottom<=height,'Starting tokens must be visible');
     assert(layout.roll.height>=44 && layout.roll.top>=0 && layout.roll.bottom<=height,`Visible 44px roll control at ${width}px`);
+    if(width===320||width===360) for(const [selector,target] of Object.entries(layout.targets)) {
+      assert(target.width>=44&&target.height>=44,`${selector} must be at least 44x44 at ${width}px (measured ${target.width}x${target.height})`);
+      assert(layout.roll.width>target.width&&layout.roll.height>=target.height,`${selector} must stay smaller than the roll primary at ${width}px`);
+    }
     assert.equal(layout.illustrated.length,63);
     assert(layout.illustrated.every(cell => cell.hasArt),'Every cell needs illustration');
     assert(layout.start.x < layout.board.x + layout.board.width/2 && layout.start.y > layout.board.y + layout.board.height/2,'Start must be bottom-left');
@@ -71,7 +76,7 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
     assert(Math.abs(finishX-(layout.board.x+layout.board.width/2))<layout.board.width*.2 && Math.abs(finishY-(layout.board.y+layout.board.height/2))<layout.board.height*.2,'Finish must be central');
     assert(!spanish.test(await page.locator('body').innerText()),'Game screen must use English');
     await page.screenshot({path:`docs/screenshots/game-${width}.png`,fullPage:true});
-    results.push({width,height,allPlayersVisible:true,illustratedCells:63,startBottomLeft:true,centralFinish:true,rollHeight:layout.roll.height});
+    results.push({width,height,allPlayersVisible:true,illustratedCells:63,startBottomLeft:true,centralFinish:true,rollHeight:layout.roll.height,touchTargets:Object.fromEntries(Object.entries(layout.targets).map(([selector,r])=>[selector,`${Math.round(r.width)}x${Math.round(r.height)}`]))});
   }
   await page.setViewportSize({width:390,height:844});
   const normalBoardWidth=await page.locator('#board').evaluate(el=>el.getBoundingClientRect().width);
