@@ -1,7 +1,7 @@
 ---
 description: Implements interaction and flow improvements for OcaGo in src/main.ts and index.html — turn feedback, control states, onboarding, dialogs, keyboard behaviour. Use for issues labelled area:interaction.
-mode: subagent
-color: blue
+mode: all
+color: "#268bd2"
 temperature: 0.3
 permission:
   edit:

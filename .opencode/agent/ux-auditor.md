@@ -1,8 +1,8 @@
 ---
 description: Audits the running OcaGo game for UI/UX defects and converts them into a prioritized backlog (docs/UX_AUDIT.md plus GitHub issues). Use when asked to audit, review, find, or improve the UI/UX of the game.
-mode: subagent
-model: opencode-go/gpt-6-luna
-color: magenta
+mode: all
+model: opencode/nemotron-3.5-super-vl-free
+color: "#d33682"
 temperature: 0.2
 permission:
   edit:
@@ -77,7 +77,8 @@ Any finding that would break one of these is not a UX finding, it is a bug repor
 4. **Capture evidence.** For each viewport in 320x740, 360x800, 390x844, 768x1024 and 1440x1000,
    take a screenshot into `docs/screenshots/audit/`. Name them `audit-<width>-<state>.png`.
    Also measure real values in the page instead of guessing: bounding boxes, computed font sizes,
-   computed colors, contrast ratios, tap-target sizes, scroll widths, focus order.
+   computed colors, contrast ratios, tap-target sizes, scroll widths, focus order. Apply the
+   measurement methodology above to every number.
 5. **Score ten areas** 1-5 with a one-line justification each:
    visual hierarchy, layout and spacing, typography, color and contrast, touch targets,
    feedback and motion, onboarding and comprehension, control states (disabled/empty/loading/error),
@@ -91,7 +92,12 @@ Any finding that would break one of these is not a UX finding, it is a bug repor
      criteria as checkable statements**, and the suggested owning agent.
    - `## Preserved` section: what already works well and must not regress.
    - `## Method` section: exact commands run, viewport list, what was and was not tested.
-7. **Create the issues.** One GitHub issue per P0 and P1 finding, and P2 findings when they are
+7. **Self-check before filing.** Reload the page into the default state and re-measure every P0
+   and P1 number you are about to file. Confirm each one against the measurement methodology and
+   against the assertions in `scripts/qa-browser.cjs`. Drop or downgrade any finding that does not
+   reproduce in the default state, and record what you dropped in `## Method`. Report the
+   self-check in your final report.
+8. **Create the issues.** One GitHub issue per P0 and P1 finding, and P2 findings when they are
    cheap and clearly scoped. Use `gh issue create --repo canmils/OcaGo --title "..." --body "..."`.
    Title format: `UX-00N: <short problem statement>`. Body: finding ID, area, severity, evidence
    with screenshot path, impact, acceptance criteria (copied verbatim), and a pointer to
@@ -101,8 +107,39 @@ Any finding that would break one of these is not a UX finding, it is a bug repor
    - `area:visual` / `area:interaction` / `area:motion` / `area:a11y` / `area:content` / `area:qa`
    - `audit:YYYY-MM-DD` with today's date
    Record the issue number in the backlog table of `docs/UX_AUDIT.md`.
-8. **Rank.** Order the backlog by player impact per unit of effort. Mark the top five findings as
+9. **Rank.** Order the backlog by player impact per unit of effort. Mark the top five findings as
    "Sprint 1" so the coordinator can dispatch them first.
+
+## Measurement methodology (mandatory)
+
+Every number you report must survive these rules. They exist because a first audit pass filed two
+P0 findings that were measurement bugs, not product defects.
+
+1. **Measure the effective background, never the page background.** For a contrast ratio, resolve
+   the surface actually painted behind the text: walk up the ancestor chain from the element and
+   use the first non-transparent `background-color`. If any ancestor between the element and that
+   surface has a `background-image` (the page uses radial gradients) or the element sits over
+   artwork, the ratio is unreliable — report it as unverified instead of substituting the body
+   colour. A status line inside a dark card is measured against the card, not against the page.
+2. **Measure in the default state.** Before any layout or size measurement: clear
+   `localStorage` and `sessionStorage`, reload, dismiss the welcome dialog, make sure the board
+   viewport is **not** zoomed (`document.querySelector('#board-viewport').classList.contains('zoomed')`
+   must be false), close every dialog, and set `scrollY = 0`. The zoom toggle keeps its class
+   until the page reloads, so a board measured while zoomed pushes everything below it down and
+   makes a visible control look like it is below the fold. Verify the state after the measurement
+   as well, and report it in the evidence.
+3. **A number that only appears in a modified state is a finding about that state.** If a value
+   differs between the default state and a state you created (zoomed board, open dialog, saved
+   match), report both numbers and state which one is the default. Do not file the modified-state
+   number as a defect of the product.
+4. **Reconcile with the passing gates before filing.** `scripts/qa-browser.cjs` already asserts
+   that the roll control is fully on screen at 320/360/390/1440px, that there is no horizontal
+   overflow, that the roll control is at least 44px high, that all 63 cells are illustrated and
+   that the start is bottom-left and 1.8x an ordinary cell. A finding that contradicts a currently
+   passing assertion is a measurement bug until you can reproduce it in the default state. Say
+   which assertion you checked.
+5. **Reproduce before you file.** Re-run the measurement in a clean state. A P0 must be
+   reproducible twice in a row from a fresh load.
 
 ## Evidence discipline
 
