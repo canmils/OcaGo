@@ -1,4 +1,22 @@
-# OcaGo delivery status — 2026-10-20
+# OcaGo delivery status — 2026-10-22
+
+## UI/UX improvement program
+
+An executable agent team now runs the improvement loop from inside the repository (`.opencode/`, documented in [.opencode/README.md](../.opencode/README.md) and [TEAM.md](TEAM.md)):
+
+`ux-auditor` audits the running game → coordinator ranks the backlog → `visual-designer` / `interaction-engineer` / `motion-designer` / `accessibility-engineer` implement on branches → `qa-verifier` checks the PR against acceptance criteria. Commands: `/ocago-audit`, `/ocago-improve`, `/ocago-implement <issue>`, `/ocago-verify <pr>`.
+
+**Audit state (pass 2 of 2026-10-22, [UX_AUDIT.md](UX_AUDIT.md)).** Two audit passes ran against the live game in Chromium at 320/360/390/768/1440px. Pass 1 filed two P0 findings that were **retracted as measurement errors**: the contrast ratio had been computed against the page background instead of the turn card (real ratio 6.43:1, passes AA), and the roll button had been measured while the board was still zoomed (in the default state it is fully visible at 581–626 in a 740px viewport). The methodology now requires the effective background, the default state, reconciliation with the passing browser suite and reproduction twice; pass 2 produced zero false P0s.
+
+Open backlog:
+
+| Issue | Severity | Finding |
+| --- | --- | --- |
+| #5 | P1 | Four controls below 44×44px at mobile ("?" 36×40, Zoom 51×32, Explore 91×32, Start 122×36); all pass at ≥768px |
+| #6 | P1 | Status line is 10px at 320/360, 11px at 390 and 12px at ≥768, below the 13px minimum |
+| #8 | P2 | Die faces are Unicode emoji (`src/main.ts:18`) rather than SVG, so they render differently per OS |
+
+Recorded without an issue yet: the roll button is 45px rather than 48px at mobile, and it is 8th in the tab order.
 
 ## Latest user direction
 
