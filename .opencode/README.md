@@ -93,7 +93,12 @@ The backlog is machine-readable through labels:
 
 - Edit an agent file in `.opencode/agent/`; the frontmatter controls its model, colour and
   permissions, the body is its prompt.
-- Models are pinned only where the task needs them: the auditor and the visual designer read
-  screenshots, so they use a vision-capable model. The rest inherit the session model. Change the
-  `model:` line to switch a specialist.
+- Models are pinned only where the task needs them: the auditor, the visual designer and the QA
+  verifier read screenshots, so they use a vision-capable model. The rest inherit the session
+  model. Change the `model:` line to switch a specialist.
+- The pinned models are the `opencode/*` free tier (`nemotron-3.5-super-vl-free`,
+  `mimo-v2.6-flash-free`). The `opencode-go/*` models were rejected with an expired API key on
+  this account, so they are not used.
+- Agents are `mode: all`, so each one is also selectable directly in the TUI and runnable with
+  `opencode run --agent <name>`.
 - After any change here, restart opencode: the configuration is read once at startup.

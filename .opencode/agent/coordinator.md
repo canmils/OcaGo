@@ -1,7 +1,7 @@
 ---
 description: Orchestrates the OcaGo UI/UX improvement loop — turns the audit backlog into parallel specialist work, one branch and PR per issue, and hands every PR to QA before review. Use to plan or run a whole improvement cycle.
-mode: subagent
-color: yellow
+mode: all
+color: "#b58900"
 temperature: 0.2
 permission:
   edit:

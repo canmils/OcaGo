@@ -1,7 +1,8 @@
 ---
 description: Independently verifies OcaGo changes against acceptance criteria with the test suite, the production build and a real browser, and adds regression tests for each defect fixed. Use to check a PR, a branch or a claim.
-mode: subagent
-color: yellow
+mode: all
+model: opencode/mimo-v2.6-flash-free
+color: "#b58900"
 temperature: 0.1
 permission:
   edit:

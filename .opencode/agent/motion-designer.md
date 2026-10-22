@@ -1,7 +1,7 @@
 ---
 description: Implements motion and animation improvements for OcaGo in src/animation.ts, src/animation.css, src/idle.ts and src/idle.css — timing, easing, cancellation safety, reduced motion. Use for issues labelled area:motion.
-mode: subagent
-color: purple
+mode: all
+color: "#6c71c4"
 temperature: 0.3
 permission:
   edit:

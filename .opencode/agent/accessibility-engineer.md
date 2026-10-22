@@ -1,7 +1,7 @@
 ---
 description: Implements accessibility improvements for OcaGo in the dedicated src/a11y.ts and src/a11y.css modules, plus tests/a11y.test.ts. Use for issues labelled area:a11y.
-mode: subagent
-color: green
+mode: all
+color: "#859900"
 temperature: 0.2
 permission:
   edit:

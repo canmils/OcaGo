@@ -1,8 +1,8 @@
 ---
 description: Implements visual and layout improvements for OcaGo (typography, color, spacing, elevation, component states) in src/style.css and src/technical-art.css. Use for issues labelled area:visual.
-mode: subagent
-model: opencode-go/gpt-6-luna
-color: orange
+mode: all
+model: opencode/mimo-v2.6-flash-free
+color: "#d75f00"
 temperature: 0.3
 permission:
   edit:
