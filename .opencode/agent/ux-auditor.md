@@ -99,6 +99,10 @@ Any finding that would break one of these is not a UX finding, it is a bug repor
    self-check in your final report.
 8. **Create the issues.** One GitHub issue per P0 and P1 finding, and P2 findings when they are
    cheap and clearly scoped. Use `gh issue create --repo canmils/OcaGo --title "..." --body "..."`.
+   Before creating anything, run `gh issue list --repo canmils/OcaGo --state all --search "UX-0"`
+   to find issues that already exist for a finding ID: **update the existing issue with a comment**
+   carrying the new evidence instead of opening a duplicate. Retract in the same way when a
+   previous finding turns out to be wrong — close the issue with the corrected measurement.
    Title format: `UX-00N: <short problem statement>`. Body: finding ID, area, severity, evidence
    with screenshot path, impact, acceptance criteria (copied verbatim), and a pointer to
    `docs/UX_AUDIT.md`. Apply labels:
