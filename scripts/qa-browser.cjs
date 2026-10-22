@@ -10,6 +10,9 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
   const browser = await chromium.launch({executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox']});
   const page = await browser.newPage({reducedMotion:'reduce'});
   const errors = [], results = [];
+  // The faked clock must advance in small steps: a single large jump fires timers but
+  // skips the animation-frame tick that Chromium needs to deliver a dialog's close event.
+  const advance = async ms => { for (let elapsed = 0; elapsed < ms; elapsed += 100) await page.clock.runFor(Math.min(100, ms - elapsed)); };
   page.on('pageerror', error => errors.push(error.message));
   await page.addInitScript(() => {
     window.qaAudio = {contexts:0,frequencies:[]};
@@ -100,7 +103,7 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
   const legacy=structuredClone(base);legacy.players[0].name='Tú';legacy.players[0].position=12;legacy.message='¡Cruzas el puente y vuelves a tirar!';await page.evaluate(game=>localStorage.setItem('ocago.match',JSON.stringify({version:1,game})),legacy);await page.reload();assert((await page.locator('#players').innerText()).includes('You'));assert(!spanish.test(await page.locator('#status').innerText()));assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('ocago.match')).version),2);
   let game=structuredClone(base); game.turn=1;
   await page.evaluate(() => localStorage.setItem('ocago:sound','on')); await inject(game);
-  await page.clock.runFor(5000); assert.equal(await page.evaluate(() => window.qaAudio.contexts),0);
+  await advance(5000); assert.equal(await page.evaluate(() => window.qaAudio.contexts),0);
   await page.evaluate(() => localStorage.setItem('ocago:sound','off'));
   results.push({savedOptInBotNoAutoplay:true});
   game=structuredClone(base); game.players[0].name='<em id="injected">X</em>'; await inject(game);
@@ -131,39 +134,39 @@ const base = {players: [{name:'You',position:0,skip:0},{name:'Lola',position:0,s
   await page.setViewportSize({width:390,height:844});await page.screenshot({path:'docs/screenshots/game-shared-390.png',fullPage:true});results.push({sharedPawnGeometry:true});
   game=structuredClone(base); game.turn=1; await inject(game);
   await page.evaluate(() => crypto.getRandomValues=array=>{array[0]=0;return array;});
-  await page.locator('#help').click(); await page.clock.runFor(5000);
+  await page.locator('#help').click(); await advance(5000);
   assert.equal(await page.locator('#players .player b').nth(1).innerText(),'0/63');
-  await page.keyboard.press('Escape'); await page.clock.runFor(5000);
+  await page.keyboard.press('Escape'); await advance(5000);
   assert.notEqual(await page.locator('#players .player b').nth(1).innerText(),'0/63');
   await inject(base); await page.locator('#roll').click(); await page.locator('#restart').click(); await page.locator('#confirm-restart').click();
-  await page.clock.runFor(5000); assert.deepEqual(await page.locator('#players .player b').allTextContents(),['0/63','0/63','0/63']);
+  await advance(5000); assert.deepEqual(await page.locator('#players .player b').allTextContents(),['0/63','0/63','0/63']);
   game=structuredClone(base); game.players[0].skip=1; game.players[0].position=19; await inject(game);
   assert(/rest|skip/i.test(await page.locator('#roll').innerText()));
   await page.locator('#sound').click(); await page.evaluate(() => window.qaAudio.frequencies=[]);
-  await page.locator('#roll').click(); await page.clock.runFor(50);
+  await page.locator('#roll').click(); await advance(50);
   assert.equal(await page.evaluate(() => document.querySelector('#dice').getAnimations().length),0);
   const frequencies=await page.evaluate(() => window.qaAudio.frequencies);
   assert(!frequencies.includes(220) && !frequencies.includes(294));
   assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('ocago.match')).game.players[0].skip),0);
   await page.locator('#journal').click(); assert(/rest|skip|miss|wait/i.test(await page.locator('#turn-log').innerText()));
-  await page.keyboard.press('Escape'); await page.clock.runFor(5000);
+  await page.keyboard.press('Escape'); await advance(5000);
   await page.locator('#journal').click(); assert(/rest|skip|miss|wait/i.test(await page.locator('#turn-log').innerText()));
   assert(await page.locator('#turn-log li').count()>1); await page.keyboard.press('Escape'); await page.locator('#sound').click();
   game=structuredClone(base); game.players[0].position=62; await inject(game);
-  await page.evaluate(() => crypto.getRandomValues=array=>{array[0]=0;return array;}); await page.locator('#roll').click(); await page.clock.runFor(5000);
+  await page.evaluate(() => crypto.getRandomValues=array=>{array[0]=0;return array;}); await page.locator('#roll').click(); await advance(5000);
   assert(await page.locator('#victory').isVisible()); assert(!spanish.test(await page.locator('#victory').innerText()));
   assert(await page.locator('#roll').isDisabled()); await page.reload(); assert(await page.locator('#roll').isDisabled());
   if(await page.locator('#victory').isVisible()) await page.locator('#view-board').click();
   await page.locator('#restart').click(); await page.locator('#confirm-restart').click(); assert(await page.locator('#roll').isEnabled());
   game=structuredClone(base); game.turn=2; game.players[2].position=62; await inject(game);
-  await page.evaluate(() => crypto.getRandomValues=array=>{array[0]=0;return array;}); await page.clock.runFor(5000);
+  await page.evaluate(() => crypto.getRandomValues=array=>{array[0]=0;return array;}); await advance(5000);
   assert(await page.locator('#victory').isVisible()); await page.locator('#again').click();
   await page.evaluate(() => {let seed=17;crypto.getRandomValues=array=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;array[0]=seed;return array;};});
   let cycles=0;
   while(cycles++<1000) {
     if(await page.locator('#victory').isVisible()) break;
     if(await page.locator('#roll').isEnabled()) await page.locator('#roll').click();
-    await page.clock.runFor(5000);
+    await advance(5000);
     assert(!spanish.test(await page.locator('#status').innerText()),'Live outcome must be English');
   }
   assert(cycles<1000,'Full seeded match must finish');

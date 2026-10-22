@@ -28,6 +28,16 @@ Each agent owns its assigned files and records decisions, evidence, results, and
 
 The user has now explicitly requested GitHub delivery to `canmils/OcaGo`. The coordinator may commit and push integrated, validated work to `main`; specialist agents leave committing and pushing to the coordinator. GitHub Pages is the requested playable delivery path. Do not describe an unverified deployment as live.
 
+## Automated UI/UX improvement loop
+
+The specialist team described above now has executable form under [.opencode/](.opencode/README.md): an audit agent that plays the real game and turns the findings into a prioritized backlog, a coordinator that dispatches specialists per file ownership, and an independent QA agent that verifies every change before review.
+
+- Run `/ocago-audit` to refresh `docs/UX_AUDIT.md` and open the backlog issues.
+- Run `/ocago-improve` for a full cycle, `/ocago-implement <issue>` for one issue, `/ocago-verify <pr>` to check a pull request.
+- Agents work on branches and open pull requests; they never merge and never push to `main` without the user's explicit approval.
+- Ownership stays strict: `src/game.ts` remains a pure rules engine, and the file ownership table in [.opencode/README.md](.opencode/README.md) applies to the automated agents as well.
+- Audit findings must cite measured values or screenshots. A design document is a proposal, not evidence.
+
 ## Milestones and quality gate
 1. Research and concise product/rules specification.
 2. Complete playable local match: human plus bots, all special squares, turn sequencing, victory, restart, and rules help.

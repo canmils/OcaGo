@@ -29,6 +29,10 @@ The initial functional prototype is a baseline, not the final quality target. Th
 
 The coordinator integrates modules into the actual game; QA independently validates the combined production build. This is a coordinated session team with durable handoff documents, not a permanently running autonomous service. The next task should resume from STATUS.md and incomplete acceptance criteria rather than respawning every role without a concrete need.
 
+## Executable agent team
+
+The roles above are now also opencode agents under [.opencode/agent](../.opencode/README.md), with a coordinator that groups work by file ownership so parallel branches never conflict, and an independent QA agent that verifies each change before it reaches review. The audit agent plays the running game in a real browser and converts what it finds into the prioritized backlog in `docs/UX_AUDIT.md` plus GitHub issues labelled `ux-audit`. Commands: `/ocago-audit`, `/ocago-improve`, `/ocago-implement`, `/ocago-verify`. Agents open pull requests; a human merges.
+
 ## Delivery gate
 
 Do not call the redesign finished from documents alone. Integrate assets, motion and persistence, run tests and production build, and check the resulting screens and full match in Chromium. Record exact evidence and remaining defects. GitHub Actions and Pages are the intended delivery path; do not claim a live public URL until verified. The current environment can push Git commits but GitHub API operations returned Forbidden, so Pages configuration/deployment status may require repository-owner action.
