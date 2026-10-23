@@ -72,3 +72,15 @@ No real participant playtest, iOS/Safari run, screen-reader audit, exhaustive co
 ## Public deployment verification — 2026-10-20
 
 Coordinator verified GitHub Actions run39388226511 completed build and Pages deployment successfully for source commit d88bded. The site https://canmils.github.io/OcaGo/ serves the English HTML and all16 deployed HTML/JS/CSS/art files match the independently browser-tested production build byte-for-byte, downloaded with TLS certificate verification enabled. Direct public Chromium navigation failed with ERR_CERT_AUTHORITY_INVALID in the environment proxy; validation was not bypassed. Functional browser evidence above is from the identical local production build, while HTTPS verification establishes the published artifact identity. This distinction does not claim an end-to-end browser run against the public hostname.
+
+## Die SVG verification — 2026-10-23 (issue #8)
+
+Independent check of `fix/die-svg` against the UX-007 acceptance criteria, in Chromium at 320×740, 360×800, 390×844, 768×1024 and 1440×1000.
+
+- `#dice` contains exactly one `svg.die-face` child at every viewport; before the first roll there is no text node, and no announcement range `U+2680–U+2685` (die emoji) appears in the DOM.
+- The SVG fills the die box exactly (45×45 at mobile, 78×78 at 768/1440) with no horizontal page overflow (`scrollWidth === clientWidth`).
+- After a human roll the face repaints to the rolled value: `data-face="2"` with exactly 2 pips, and the accessible name changes from "Die not rolled yet" to "Die: 2".
+- Zero JavaScript page errors during first load, welcome dismissal, roll and replot.
+- Unit coverage: `tests/die-art.test.ts` asserts that all six faces are original SVG, contain no emoji or external asset, have pip counts 1–6, and are all distinct.
+
+Limits: the screenshot was captured but not visually reviewed in this headless session; physical-device rendering and subjective art judgement remain open.

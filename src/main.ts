@@ -7,6 +7,7 @@ import {createAudio} from './audio';
 import {createBoardAtmosphere,type ArrivalKind} from './technical-art';
 import {createIdleScene} from './idle';
 import {tileArt,startArt,finishArt,tileArtLabel} from './tile-art';
+import {dieFaceSVG,setDieFace} from './die-art';
 import {boardLayout} from './board-layout';
 
 let game:Game=loadMatch()??newGame();
@@ -15,7 +16,6 @@ let timer:ReturnType<typeof setTimeout>|undefined;
 const turnLog:string[]=[];
 const art=(name:string)=>`${import.meta.env.BASE_URL}art/${name}.svg`;
 const escapeHTML=(value:string)=>value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
 <header class="topbar">
@@ -35,7 +35,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
    <section class="turn-card" aria-label="Turn controls">
     <div class="turn-top"><span class="eyebrow" id="turn-label">YOUR TURN</span><span class="live-dot"></span></div>
     <h2 id="turn-title">Where will you land?</h2>
-    <div class="dice-scene"><div class="dice" id="dice" aria-label="Die not rolled yet">⚄</div></div>
+    <div class="dice-scene"><div class="dice" id="dice" aria-label="Die not rolled yet" data-face="5">${dieFaceSVG(5)}</div></div>
     <button class="roll" id="roll">Roll the die <span>→</span></button>
     <p class="status" id="status" role="status" aria-live="polite"></p>
    </section>
@@ -91,7 +91,7 @@ function render(){
  $('#turn-label').textContent=game.winner!==null?'THE FINISH IS REACHED':game.turn===0?'YOUR TURN':`${game.players[game.turn].name.toUpperCase()}'S TURN`;
  $('#turn-title').textContent=game.winner!==null?(game.winner===0?'Your garden moment!':'What a race!'):game.turn===0?'Where will you land?':'The story continues.';
  const roll=$<HTMLButtonElement>('#roll');roll.disabled=busy||game.turn!==0||game.winner!==null;roll.innerHTML=game.winner!==null?'Game finished ✓':busy?'On the move…':game.turn!==0?'Computer player moving…':game.players[0].skip?'Rest this turn →':'Roll the die <span>→</span>';
- if(!busy){$('#dice').textContent=faces[(game.roll??5)-1];$('#dice').setAttribute('aria-label',game.roll?`Die: ${game.roll}`:'Die not rolled yet');}
+ if(!busy){setDieFace($('#dice'),game.roll??5);$('#dice').setAttribute('aria-label',game.roll?`Die: ${game.roll}`:'Die not rolled yet');}
  $('#players').innerHTML=game.players.map((player,index)=>`<div class="player ${game.turn===index&&game.winner===null?'active':''}" data-player="${index}" aria-label="${escapeHTML(player.name)}, position ${player.position}${game.turn===index&&game.winner===null?', current turn':''}"><span class="avatar p${index}"><img src="${art(index===0?'mascot-goose':index===1?'atmosphere-lola':'atmosphere-bruno')}" alt=""></span><div class="player-info"><strong>${escapeHTML(player.name)}</strong><small>${player.skip?`Rest ${player.skip}`:game.turn===index&&game.winner===null?'Current turn':index===0?'Your goose':'Computer'}</small></div><b>${player.position}<small>/63</small></b></div>`).join('');
  $('#start-tokens').innerHTML=game.players.map((player,index)=>player.position===0?`<span class="token p${index} ${game.turn===index?'current-token':''}" title="${escapeHTML(player.name)} at START">${index===0?'Y':escapeHTML(player.name[0])}</span>`:'').join('');
  board.querySelectorAll<HTMLElement>('.cell').forEach(cell=>cell.dataset.occupants='0');
