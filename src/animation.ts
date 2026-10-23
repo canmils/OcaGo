@@ -1,7 +1,7 @@
 import './animation.css';
+import {setDieFace} from './die-art';
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
 /** Every effect settles when cancelled; a restart never leaves an awaiting turn stuck. */
 async function motion(el: HTMLElement, frames: Keyframe[], duration: number, signal?: AbortSignal): Promise<void> {
@@ -27,7 +27,7 @@ export async function animateDice(el: HTMLElement, die: number, signal?: AbortSi
       {transform:'translateY(0) rotate(0) scale(1)'}
     ], 440, signal);
     if (!signal?.aborted) {
-      el.textContent = faces[die - 1] ?? '⚀';
+      setDieFace(el, die);
       el.setAttribute('aria-label', `Die: ${die}`);
     }
   } finally { el.classList.remove('motion-dice'); }
