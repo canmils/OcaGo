@@ -72,3 +72,7 @@ No real participant playtest, iOS/Safari run, screen-reader audit, exhaustive co
 ## Public deployment verification — 2026-10-20
 
 Coordinator verified GitHub Actions run39388226511 completed build and Pages deployment successfully for source commit d88bded. The site https://canmils.github.io/OcaGo/ serves the English HTML and all16 deployed HTML/JS/CSS/art files match the independently browser-tested production build byte-for-byte, downloaded with TLS certificate verification enabled. Direct public Chromium navigation failed with ERR_CERT_AUTHORITY_INVALID in the environment proxy; validation was not bypassed. Functional browser evidence above is from the identical local production build, while HTTPS verification establishes the published artifact identity. This distinction does not claim an end-to-end browser run against the public hostname.
+
+## Roll target verification — 2026-10-23 (issue #15 / UX-005)
+
+Chromium default state, fresh storage, welcome dismissed. Roll button measures 222×48 at 320×740 (bottom 629), 262×48 at 360×800 (bottom 666), 286×48 at 390×844 (bottom 710), 186×51 at 768×1024, 231×51 at 1440×1000. Every case is at least 48px high, fully inside the viewport, with no horizontal overflow and no page errors.
