@@ -18,6 +18,7 @@ const escapeHTML=(value:string)=>value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'
 const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
+<a class="skip-link" href="#roll">Skip to roll the die</a>
 <header class="topbar">
  <a class="brand" href="./" aria-label="OcaGo home"><img src="${art('mascot-goose')}" alt=""><span>oca<b>go</b><small>THE STORYBOOK RACE</small></span></a>
  <div class="header-actions"><button class="utility-button" id="sound" aria-pressed="false" aria-label="Enable sound">Sound off</button><button class="utility-button" id="journal">Turns</button><button class="icon-button" id="help" aria-label="How to play">?</button></div>

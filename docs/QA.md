@@ -72,3 +72,13 @@ No real participant playtest, iOS/Safari run, screen-reader audit, exhaustive co
 ## Public deployment verification — 2026-10-20
 
 Coordinator verified GitHub Actions run39388226511 completed build and Pages deployment successfully for source commit d88bded. The site https://canmils.github.io/OcaGo/ serves the English HTML and all16 deployed HTML/JS/CSS/art files match the independently browser-tested production build byte-for-byte, downloaded with TLS certificate verification enabled. Direct public Chromium navigation failed with ERR_CERT_AUTHORITY_INVALID in the environment proxy; validation was not bypassed. Functional browser evidence above is from the identical local production build, while HTTPS verification establishes the published artifact identity. This distinction does not claim an end-to-end browser run against the public hostname.
+
+## Keyboard order verification — 2026-10-23 (issue #16 / UX-006)
+
+Chromium at 320×740, 390×844 and 1440×1000, welcome dismissed, fresh storage.
+
+- The first Tab stop is the visible `Skip to roll the die` link (rendered at top 8px when focused).
+- Enter on it moves focus to `#roll`, fully visible with no scrolling needed — one Tab and one Enter instead of seven Tabs.
+- Board roving focus still works: `#cell-1` + ArrowRight -> `#cell-2` -> `#cell-3`.
+- Dialog focus return holds: rules opened from `#help` returns focus to `#help` on Escape; square detail opened from `#legend` returns to `#legend`.
+- Zero page errors at all three viewports.
